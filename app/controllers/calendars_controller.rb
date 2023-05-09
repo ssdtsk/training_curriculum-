@@ -8,15 +8,20 @@ class CalendarsController < ApplicationController
 
   # 予定の保存
   def create
-    Plan.create(plan_params)
-    redirect_to action: :index
+    @plan = Plan.new(plan_params)
+    if @plan.save
+      redirect_to action: :index
+    else
+      getWeek
+      render :index
+    end
   end
 
   private
 
   def plan_params
     params.require(:calendars).permit(:date, :plan)
-  end
+  end  
 
   def getWeek
     wdays = ['(日)','(月)','(火)','(水)','(木)','(金)','(土)']
