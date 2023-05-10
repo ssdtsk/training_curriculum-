@@ -8,13 +8,8 @@ class CalendarsController < ApplicationController
 
   # 予定の保存
   def create
-    @plan = Plan.new(plan_params)
-    if @plan.save
-      redirect_to action: :index
-    else
-      get_week
-      render :index
-    end
+    Plan.create(plan_params)
+    redirect_to action: :index
   end
 
   private
@@ -40,11 +35,11 @@ class CalendarsController < ApplicationController
         today_plans.push(plan.plan) if plan.date == @todays_date + x
       end
 
-      wday_num = Date.today.wday# wday
-      if wday_num + x>= 7
+      wday_num = Date.today.wday+x # wday
+      if wday_num >= 7
         wday_num = wday_num-7
       end
-      days = { :month => (@todays_date + x).month, :date => (@todays_date+x).day, :plans => today_plans,:wday => wdays[wday_num+x]}
+      days = { :month => (@todays_date + x).month, :date => (@todays_date+x).day, :plans => today_plans,:wday => wdays[wday_num]}
       @week_days.push(days)
     end
     end
